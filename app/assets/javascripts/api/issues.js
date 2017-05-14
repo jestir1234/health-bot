@@ -202,17 +202,16 @@ recognition.start();
   }
 
   const renderImages = (images) => {
-    let body = document.getElementsByTagName("BODY")[0];
+
     images = images.images;
-    let imagesContainer = document.createElement("div");
-    imagesContainer.setAttribute("class", "images-container");
+    let imagesContainer = document.getElementsByClassName("images-container")[0];
+    
     images.forEach((image) => {
       let imageDiv = document.createElement('img');
       imageDiv.src = image.display_sizes[0].uri
       imagesContainer.appendChild(imageDiv);
     });
 
-    body.appendChild(imagesContainer);
   }
 
   const updateResponseText = function(){

@@ -102,4 +102,13 @@ input{
   display: flex;
   justify-content: space-between;
   z-index: -3;
+  -webkit-animation: fade 1s; /* Safari, Chrome and Opera > 11.1 */
+       -moz-animation: fade 1s; /* Firefox < 16 */
+        -ms-animation: fade 1s; /* Internet Explorer */
+         -o-animation: fade 1s; /* Opera < 11.1 */
+            animation: fade 1s;
+}
+
+.images-container > * {
+  padding: 10px;
 }
