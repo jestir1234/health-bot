@@ -9,6 +9,12 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   }
 
+  // fetchTranslate("What are your symptoms?").then((voice) => playVoice(voice));
+
+  // const playVoice = (voice) => {
+  //   debugger
+  //   var audio = new Audio(voice);
+  // }
 
   var symptomsCollection = [];
   var currentDiag;
@@ -20,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   };
 
-  const fetchSymptoms = function(){
+  var fetchSymptoms = function(){
     var symptoms = $("#symptoms-input").val();
     var symptomItem = document.createElement("p");
     symptomItem.innerHTML = symptoms;
