@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   //
   $("#symptom-add-btn").on("click", function(e){ fetchSymptoms().then((symptom) => symptomsCollection.push(symptom))});
-  $("#submit-btn").on("click", function(e){ fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText())});
+  $("#submit-btn").on("click", function(e){ fetchDiagnosis(symptomsCollection).then(function(diag){ updateResponseText()})});
   //
   const fetchDiagnosis = function(symptoms){
     var sex = $("#sex-input").val();
