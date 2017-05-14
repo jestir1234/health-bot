@@ -1,0 +1,26 @@
+{
+  "name": "healthbot",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jestir1234/health-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jestir1234/health-bot/issues"
+  },
+  "homepage": "https://github.com/jestir1234/health-bot#readme",
+  "dependencies": {
+    "browserify-incremental": "^3.1.1"
+  }
+}
