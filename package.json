@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/jestir1234/health-bot#readme",
   "dependencies": {
+    "browserify": "^14.3.0",
     "browserify-incremental": "^3.1.1"
   }
 }
