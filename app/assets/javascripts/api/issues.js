@@ -53,61 +53,67 @@ document.addEventListener("DOMContentLoaded", function() {
     var query = {symptoms: symptoms, sex: sex, age: age};
     return $.ajax({
       method: "POST",
-      url: `api/diagnosis`,
+      url: 'api/diagnosis',
       data: {query},
       success: function(diag) { currentDiag = diag}
     })
   }
 
-  // const updateDiagnosis = (answer) => {
+  const updateDiagnosis = function(answer){
+
+    return $.ajax({
+      method: "POST",
+      url: '/api/responses',
+      data: {diag: currentDiag, answer: answer},
+      success: function(diag){
+        currentDiag = diag
+      }
+    })
+  }
   //
-  //   return $.ajax({
-  //     method: "POST",
-  //     url: '/api/responses',
-  //     data: {diag: currentDiag, answer: answer},
-  //     success: (diag) => {
-  //       currentDiag = diag
-  //     }
-  //   })
-  // }
-  //
-  // const renderOptions = (symptom) => {
-  //   var name = symptom.name;
-  //   var symptom_id = symptom.id;
-  //   var answerContainer = document.getElementById("answer-container");
-  //   var symptomContainer = document.createElement("div");
-  //   symptomContainer.setAttribute("class", "symptom");
-  //   symptomContainer.innerHTML = name;
-  //   answerContainer.appendChild(symptomContainer);
-  //   symptom.choices.forEach((choice) => {
-  //     var choiceBtn = document.createElement('button');
-  //     choiceBtn.setAttribute("class", "btn");
-  //     choiceBtn.addEventListener("click", () => updateDiagnosis(choice.id).then(() => updateResponseText()));
-  //     choiceBtn.innerHTML = choice.label;
-  //
-  //     answerContainer.appendChild(choiceBtn);
-  //   });
-  // }
+  const renderOptions = function(symptom) {
+    var name = symptom.name;
+    var symptom_id = symptom.id;
+    var answerContainer = document.getElementById("answer-container");
+    var symptomContainer = document.createElement("div");
+    symptomContainer.setAttribute("class", "symptom");
+    symptomContainer.innerHTML = name;
+    answerContainer.appendChild(symptomContainer);
+    symptom.choices.forEach((choice) => {
+      var choiceBtn = document.createElement('button');
+      choiceBtn.setAttribute("class", "btn");
+      choiceBtn.addEventListener("click", function(){
+        updateDiagnosis(choice.id)
+        .then( function() {
+          updateResponseText()
+        }
+      )
+    });
+      choiceBtn.innerHTML = choice.label;
+
+      answerContainer.appendChild(choiceBtn);
+    });
+  }
   //
   //
-  // const updateResponseText = () => {
-  //   $('#answer-container').empty();
-  //   var responseContainer = document.getElementById("response-container");
-  //   var answerContainer = document.getElementById("answer-container");
-  //   var illnessContainer = document.getElementById("illness-container");
-  //
-  //   var options = currentDiag.response.question.items;
-  //
-  //   options.forEach((symptom) => {
-  //     renderOptions(symptom);
-  //   });
-  //
-  //   console.log(options);
-  //
-  //   responseContainer.innerHTML = currentDiag.response.question.text;
-  //   illnessContainer.innerHTML = currentDiag.most_likely_illness || ""
-  //
-  // }
+  const updateResponseText = function(){
+    $('#answer-container').empty();
+    var responseContainer = document.getElementById("response-container");
+    var answerContainer = document.getElementById("answer-container");
+    var illnessContainer = document.getElementById("illness-container");
+
+    var options = currentDiag.response.question.items;
+
+    options.forEach(function(symptom){
+      renderOptions(symptom);
+    });
+
+    console.log(options);
+
+    responseContainer.innerHTML = currentDiag.response.question.text;
+    illnessContainer.innerHTML = currentDiag.most_likely_illness || ""
+
+  }
 
 
 });
