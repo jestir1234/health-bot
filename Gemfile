@@ -11,7 +11,7 @@ gem 'rails', '~> 5.0.2'
 gem 'infermedica'
 gem 'pry-rails'
 gem 'excon'
-ruby '2.3.4'
+ruby '2.4.0'
 gem "browserify-rails"
 
 gem 'figaro'
