@@ -9,12 +9,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   }
 
-  // fetchTranslate("What are your symptoms?").then((voice) => playVoice(voice));
-
-  // const playVoice = (voice) => {
-  //   debugger
-  //   var audio = new Audio(voice);
-  // }
 
   var symptomsCollection = [];
   var currentDiag;
