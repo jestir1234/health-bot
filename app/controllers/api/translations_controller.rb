@@ -3,7 +3,7 @@ require 'excon'
 class Api::TranslationsController < ApplicationController
 
   def create
-    debugger
+
     text = params[:text]
     response = Excon.post("https://stream.watsonplatform.net/text-to-speech/api/v1/synthesize",
      body: "{\"text\": \"some text\"}",
@@ -14,6 +14,11 @@ class Api::TranslationsController < ApplicationController
      )
 
      @voice = response.body.to_s
+
+    #  Excon.post('http://udata.stream/docs',
+    #  :body => "#{@voice}",
+    #  :headers => { "Content-Type" => "application/x-www-form-urlencoded" })
+
     render 'api/translations/translations'
   end
 end

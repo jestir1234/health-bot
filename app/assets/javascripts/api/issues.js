@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
   console.log("dom ready");
+  let allSymptoms;
+
+  responsiveVoice.speak("Please state your symptoms.");
 
   const fetchTranslate = function(text) {
     return $.ajax({
@@ -9,15 +12,102 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   }
 
-  // fetchTranslate("What are your symptoms?").then((voice) => playVoice(voice));
+  const fetchAllSymptoms = () => {
+    return $.ajax({
+      method: "GET",
+      url: "api/symptoms",
+      success: (symptoms) => { allSymptoms = symptoms.symptoms}
+    })
+  }
 
-  // const playVoice = (voice) => {
-  //   debugger
-  //   var audio = new Audio(voice);
-  // }
+  fetchAllSymptoms();
 
-  var symptomsCollection = [];
-  var currentDiag;
+  let recognition = new window.webkitSpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  // recognition.interimResults = false;
+  // recognition.maxAlternatives = 5;
+  recognition.onstart = function() {
+    console.log('Speech recognition service has started');
+};
+
+  recognition.onerror = function(event) {
+      console.error(event);
+  };
+
+  recognition.onend = function() {
+    console.log('Speech recognition service disconnected');
+};
+
+recognition.onresult = function(event) {
+    let interim_transcript = '';
+    let final_transcript = '';
+
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+        // Verify if the recognized text is the last with the isFinal property
+        if (event.results[i].isFinal) {
+            final_transcript += event.results[i][0].transcript;
+        } else {
+            interim_transcript += event.results[i][0].transcript;
+        }
+    }
+
+    // Choose which result may be useful for you
+
+    console.log("Interim: ", interim_transcript);
+
+    // $('#symptoms-input').val(interim_transcript)
+
+    console.log("Final: ",final_transcript);
+    console.log(`final transcript is ${final_transcript}`);
+    if (final_transcript === " add"){
+      console.log("adding to symptoms");
+      let thisBtn = document.getElementById("symptom-add-btn");
+      thisBtn.click();
+    } else if (final_transcript === " submit"){
+      console.log("submitting form...")
+      let thisBtn = document.getElementById("submit-btn");
+      thisBtn.click();
+    } else if (final_transcript === " yes") {
+      console.log("answer is yes...")
+      let thisBtn = document.getElementsByClassName("btn")[0];
+      thisBtn.click();
+    } else if (final_transcript === " no") {
+      console.log("answer is no...")
+      let thisBtn = document.getElementsByClassName("btn")[1];
+      thisBtn.click();
+    } else if (final_transcript === " don't know") {
+      console.log("answer is don't know...")
+      let thisBtn = document.getElementsByClassName("btn")[2];
+      thisBtn.click();
+    } else if (final_transcript === " clear") {
+      $('.symptom-list').empty();
+    } else if (final_transcript !== "") {
+      $('#symptoms-input').val(final_transcript)
+    }
+};
+
+recognition.start();
+
+  const playVoice = (text) =>{
+    if (currentDiag.most_likely_illness){
+      text = text + `You might have a ${currentDiag.most_likely_illness}`
+    }
+
+    responsiveVoice.speak(text);
+
+  }
+
+
+  const clearSymptoms = () => {
+    $('.symptom-list').empty();
+  }
+
+  $('#symptom-clear-btn').on("click", clearSymptoms)
+
+  let symptomsCollection = [];
+  let currentDiag;
 
   const fetchIssue = function() {
     return $.ajax({
@@ -26,16 +116,16 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   };
 
-  var fetchSymptoms = function(){
-    var symptoms = $("#symptoms-input").val();
-    var symptomItem = document.createElement("p");
+  let fetchSymptoms = function(){
+    let symptoms = $("#symptoms-input").val();
+    let symptomItem = document.createElement("p");
     symptomItem.innerHTML = symptoms;
-    var symptomList = document.getElementsByClassName('symptom-list')[0];
+    let symptomList = document.getElementsByClassName('symptom-list')[0];
     symptomList.appendChild(symptomItem);
     $("#symptoms-input").val("");
-    var sex = $("#sex-input").val();
-    var age = $("#age-input").val();
-    var query = {symptoms: symptoms, sex: sex, age: age};
+    let sex = $("#sex-input").val();
+    let age = $("#age-input").val();
+    let query = {symptoms: symptoms, sex: sex, age: age};
     return $.ajax({
       method: "POST",
       url: 'api/symptoms',
@@ -44,13 +134,18 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   //
-  $("#symptom-add-btn").on("click", function(e){ fetchSymptoms().then(function(symptom){symptomsCollection.push(symptom)})});
-  $("#submit-btn").on("click", function(e){ fetchDiagnosis(symptomsCollection).then(function(diag){ updateResponseText()})});
+  $("#symptom-add-btn").on("click", () => fetchSymptoms().then((symptom) => {
+    console.log(symptom);
+    symptomsCollection.push(symptom)
+    }
+  ));
+
+  $("#submit-btn").on("click", () => fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText()));
   //
   const fetchDiagnosis = function(symptoms){
-    var sex = $("#sex-input").val();
-    var age = $("#age-input").val();
-    var query = {symptoms: symptoms, sex: sex, age: age};
+    let sex = $("#sex-input").val();
+    let age = $("#age-input").val();
+    let query = {symptoms: symptoms, sex: sex, age: age};
     return $.ajax({
       method: "POST",
       url: 'api/diagnosis',
@@ -72,16 +167,19 @@ document.addEventListener("DOMContentLoaded", function() {
   }
   //
   const renderOptions = function(symptom) {
-    var name = symptom.name;
-    var symptom_id = symptom.id;
-    var answerContainer = document.getElementById("answer-container");
-    var symptomContainer = document.createElement("div");
+    let name = symptom.name;
+    let symptom_id = symptom.id;
+    let answerContainer = document.getElementById("answer-container");
+    let symptomContainer = document.createElement("div");
     symptomContainer.setAttribute("class", "symptom");
-    symptomContainer.innerHTML = name;
+
     answerContainer.appendChild(symptomContainer);
+    let btnContainer = document.createElement("div");
+    btnContainer.setAttribute("class", "btn-container");
     symptom.choices.forEach(function(choice){
-      var choiceBtn = document.createElement('button');
+      let choiceBtn = document.createElement('button');
       choiceBtn.setAttribute("class", "btn");
+      btnContainer.appendChild(choiceBtn);
       choiceBtn.addEventListener("click", function(){
         updateDiagnosis(choice.id)
         .then( function() {
@@ -91,17 +189,40 @@ document.addEventListener("DOMContentLoaded", function() {
     });
       choiceBtn.innerHTML = choice.label;
 
-      answerContainer.appendChild(choiceBtn);
+      answerContainer.appendChild(btnContainer);
     });
   }
 
-  const updateResponseText = function(){
-    $('#answer-container').empty();
-    var responseContainer = document.getElementById("response-container");
-    var answerContainer = document.getElementById("answer-container");
-    var illnessContainer = document.getElementById("illness-container");
+  const fetchImages = (disease) => {
+    return $.ajax({
+      method: 'POST',
+      url: 'api/images',
+      data: {disease: disease}
+    })
+  }
 
-    var options = currentDiag.response.question.items;
+  const renderImages = (images) => {
+    let body = document.getElementsByTagName("BODY")[0];
+    images = images.images;
+    let imagesContainer = document.createElement("div");
+    imagesContainer.setAttribute("class", "images-container");
+    images.forEach((image) => {
+      let imageDiv = document.createElement('img');
+      imageDiv.src = image.display_sizes[0].uri
+      imagesContainer.appendChild(imageDiv);
+    });
+
+    body.appendChild(imagesContainer);
+  }
+
+  const updateResponseText = function(){
+    fetchImages(currentDiag.most_likely_illness).then((images) => renderImages(images));
+    $('#answer-container').empty();
+    let responseContainer = document.getElementById("response-container");
+    let answerContainer = document.getElementById("answer-container");
+    let illnessContainer = document.getElementById("illness-container");
+
+    let options = currentDiag.response.question.items;
 
     options.forEach(function(symptom){
       renderOptions(symptom);
@@ -110,6 +231,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log(options);
 
     responseContainer.innerHTML = currentDiag.response.question.text;
+    playVoice(currentDiag.response.question.text);
     illnessContainer.innerHTML = currentDiag.most_likely_illness || ""
 
   }

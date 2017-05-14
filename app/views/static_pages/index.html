@@ -3,23 +3,27 @@
   <head>
     <meta charset="utf-8">
     <title></title>
+    <script src="http://code.responsivevoice.org/responsivevoice.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Inline|Bungee+Shade|Geo|Monoton|Roboto" rel="stylesheet">
   </head>
   <body>
     <h1>HealthBot</h1>
-    <label for="symptoms">Symptoms</label>
+    <label for="symptoms"></label>
     <input id="symptoms-input" type="text" name="" value="">
     <button id="symptom-add-btn" type="button" name="button">ADD SYMPTOM</button>
+    <button id="symptom-clear-btn" type="button" name="button">CLEAR SYMPTOMS</button>
+
     <br/>
     <br/>
     <div class="symptom-list">
-      <h3>symptoms list</h3>
+      <h3>Symptoms</h3>
     </div>
 
-    <label for="sex">sex</label>
-    <input id="sex-input" type="text" name="" value="">
+    <label for="sex">Sex</label>
+    <input id="sex-input" type="text" name="" value="male">
     <br/>
-    <label for="age">age</label>
-    <input id="age-input" type="text" name="" value="">
+    <label for="age">Age</label>
+    <input id="age-input" type="text" name="" value="25">
 
     <br/>
     <button id="submit-btn" type="button" name="button">Submit Information</button>
@@ -36,8 +40,5 @@
 
     </div>
 
-    <div id="audio-container">
-      
-    </div>
   </body>
 </html>
