@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function() {
     symptomContainer.setAttribute("class", "symptom");
     symptomContainer.innerHTML = name;
     answerContainer.appendChild(symptomContainer);
-    symptom.choices.forEach((choice) => {
+    symptom.choices.forEach(function(choice){
       var choiceBtn = document.createElement('button');
       choiceBtn.setAttribute("class", "btn");
       choiceBtn.addEventListener("click", function(){
@@ -94,8 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
       answerContainer.appendChild(choiceBtn);
     });
   }
-  //
-  //
+
   const updateResponseText = function(){
     $('#answer-container').empty();
     var responseContainer = document.getElementById("response-container");
