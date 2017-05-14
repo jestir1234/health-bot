@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
   console.log("dom ready");
 
-  const fetchTranslate = (text) => {
+  const fetchTranslate = function(text) {
     return $.ajax({
       method: "POST",
       url: "api/translations",
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   }
 
-  // 
+  //
   // $("#symptom-add-btn").on("click", (e) => fetchSymptoms().then((symptom) => symptomsCollection.push(symptom)));
   // $("#submit-btn").on("click", (e) => fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText()));
   //
