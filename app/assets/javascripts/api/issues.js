@@ -1,5 +1,21 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("dom ready")
+
+  const fetchTranslate = (text) => {
+    return $.ajax({
+      method: "POST",
+      url: "api/translations",
+      data: {text: text}
+    })
+  }
+
+  // fetchTranslate("What are your symptoms?").then((voice) => playVoice(voice));
+
+  // const playVoice = (voice) => {
+  //   debugger
+  //   let audio = new Audio(voice);
+  // }
+
   let symptomsCollection = [];
   let currentDiag;
 

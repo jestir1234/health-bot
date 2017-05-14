@@ -7,5 +7,7 @@ Rails.application.routes.draw do
     # get '/search' => 'symptoms#search', as: 'search'
     resources :symptoms, only: [:create]
     resources :responses, only: [:create]
+    resources :translations, only: [:create]
   end
+
 end
