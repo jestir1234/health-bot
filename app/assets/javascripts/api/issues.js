@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var query = {symptoms: symptoms, sex: sex, age: age};
     return $.ajax({
       method: "POST",
-      url: `api/symptoms`,
+      url: 'api/symptoms',
       data: {query: query}
     })
   }
