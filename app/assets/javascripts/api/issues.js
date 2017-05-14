@@ -44,21 +44,21 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   //
-  // $("#symptom-add-btn").on("click", (e) => fetchSymptoms().then((symptom) => symptomsCollection.push(symptom)));
-  // $("#submit-btn").on("click", (e) => fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText()));
+  $("#symptom-add-btn").on("click", function(e){ fetchSymptoms().then((symptom) => symptomsCollection.push(symptom))});
+  $("#submit-btn").on("click", function(e){ fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText())});
   //
-  // const fetchDiagnosis = (symptoms) => {
-  //   var sex = $("#sex-input").val();
-  //   var age = $("#age-input").val();
-  //   var query = {symptoms: symptoms, sex: sex, age: age};
-  //   return $.ajax({
-  //     method: "POST",
-  //     url: `api/diagnosis`,
-  //     data: {query},
-  //     success: (diag) => { currentDiag = diag}
-  //   })
-  // }
-  //
+  const fetchDiagnosis = function(symptoms){
+    var sex = $("#sex-input").val();
+    var age = $("#age-input").val();
+    var query = {symptoms: symptoms, sex: sex, age: age};
+    return $.ajax({
+      method: "POST",
+      url: `api/diagnosis`,
+      data: {query},
+      success: function(diag) { currentDiag = diag}
+    })
+  }
+
   // const updateDiagnosis = (answer) => {
   //
   //   return $.ajax({
