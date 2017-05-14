@@ -12,6 +12,7 @@ gem 'infermedica'
 gem 'pry-rails'
 gem 'excon'
 ruby '2.3.4'
+gem "browserify-rails"
 
 gem 'figaro'
 # Use postgresql as the database for Active Record

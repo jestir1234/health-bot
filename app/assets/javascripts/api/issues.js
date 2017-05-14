@@ -19,14 +19,14 @@ document.addEventListener("DOMContentLoaded", function() {
   let symptomsCollection = [];
   let currentDiag;
 
-  const fetchIssue = () => {
+  const fetchIssue = function() {
     return $.ajax({
       method: "POST",
       url: "api/diagnosis"
     })
   };
 
-  const fetchSymptoms = () => {
+  const fetchSymptoms = function(){
     let symptoms = $("#symptoms-input").val();
     let symptomItem = document.createElement("p");
     symptomItem.innerHTML = symptoms;
