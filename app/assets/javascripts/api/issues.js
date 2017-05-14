@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   console.log("dom ready");
-  let allSymptoms;
+  var allSymptoms;
 
   responsiveVoice.speak("Please state your symptoms.");
 
@@ -205,7 +205,7 @@ recognition.start();
 
     images = images.images;
     let imagesContainer = document.getElementsByClassName("images-container")[0];
-    
+
     images.forEach((image) => {
       let imageDiv = document.createElement('img');
       imageDiv.src = image.display_sizes[0].uri
