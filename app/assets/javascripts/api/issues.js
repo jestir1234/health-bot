@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
     return $.ajax({
       method: "GET",
       url: "api/symptoms",
-      success: (symptoms) => { allSymptoms = symptoms.symptoms}
+      success: function(symptoms) { allSymptoms = symptoms.symptoms}
     })
   }
 
