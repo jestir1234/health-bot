@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function() {
   console.log("dom ready");
-  var allSymptoms;
+  let allSymptoms;
 
   responsiveVoice.speak("Please state your symptoms.");
 
@@ -12,11 +12,11 @@ document.addEventListener("DOMContentLoaded", function() {
     })
   }
 
-  const fetchAllSymptoms = function(){
+  const fetchAllSymptoms = () => {
     return $.ajax({
       method: "GET",
       url: "api/symptoms",
-      success: function(symptoms) { allSymptoms = symptoms.symptoms}
+      success: (symptoms) => { allSymptoms = symptoms.symptoms}
     })
   }
 
@@ -90,7 +90,7 @@ recognition.onresult = function(event) {
 
 recognition.start();
 
-  const playVoice = function(text){
+  const playVoice = (text) =>{
     if (currentDiag.most_likely_illness){
       text = text + `You might have a ${currentDiag.most_likely_illness}`
     }
@@ -99,141 +99,141 @@ recognition.start();
 
   }
 
+
+  const clearSymptoms = () => {
+    $('.symptom-list').empty();
+  }
+
+  $('#symptom-clear-btn').on("click", clearSymptoms)
+
+  let symptomsCollection = [];
+  let currentDiag;
+
+  const fetchIssue = function() {
+    return $.ajax({
+      method: "POST",
+      url: "api/diagnosis"
+    })
+  };
+
+  let fetchSymptoms = function(){
+    let symptoms = $("#symptoms-input").val();
+    let symptomItem = document.createElement("p");
+    symptomItem.innerHTML = symptoms;
+    let symptomList = document.getElementsByClassName('symptom-list')[0];
+    symptomList.appendChild(symptomItem);
+    $("#symptoms-input").val("");
+    let sex = $("#sex-input").val();
+    let age = $("#age-input").val();
+    let query = {symptoms: symptoms, sex: sex, age: age};
+    return $.ajax({
+      method: "POST",
+      url: 'api/symptoms',
+      data: {query: query}
+    })
+  }
+
   //
-  // const clearSymptoms = () => {
-  //   $('.symptom-list').empty();
-  // }
+  $("#symptom-add-btn").on("click", () => fetchSymptoms().then((symptom) => {
+    console.log(symptom);
+    symptomsCollection.push(symptom)
+    }
+  ));
+
+  $("#submit-btn").on("click", () => fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText()));
   //
-  // $('#symptom-clear-btn').on("click", clearSymptoms)
+  const fetchDiagnosis = function(symptoms){
+    let sex = $("#sex-input").val();
+    let age = $("#age-input").val();
+    let query = {symptoms: symptoms, sex: sex, age: age};
+    return $.ajax({
+      method: "POST",
+      url: 'api/diagnosis',
+      data: {query},
+      success: function(diag) { currentDiag = diag}
+    })
+  }
+
+  const updateDiagnosis = function(answer){
+
+    return $.ajax({
+      method: "POST",
+      url: '/api/responses',
+      data: {diag: currentDiag, answer: answer},
+      success: function(diag){
+        currentDiag = diag
+      }
+    })
+  }
   //
-  // let symptomsCollection = [];
-  // let currentDiag;
-  //
-  // const fetchIssue = function() {
-  //   return $.ajax({
-  //     method: "POST",
-  //     url: "api/diagnosis"
-  //   })
-  // };
-  //
-  // let fetchSymptoms = function(){
-  //   let symptoms = $("#symptoms-input").val();
-  //   let symptomItem = document.createElement("p");
-  //   symptomItem.innerHTML = symptoms;
-  //   let symptomList = document.getElementsByClassName('symptom-list')[0];
-  //   symptomList.appendChild(symptomItem);
-  //   $("#symptoms-input").val("");
-  //   let sex = $("#sex-input").val();
-  //   let age = $("#age-input").val();
-  //   let query = {symptoms: symptoms, sex: sex, age: age};
-  //   return $.ajax({
-  //     method: "POST",
-  //     url: 'api/symptoms',
-  //     data: {query: query}
-  //   })
-  // }
-  //
-  // //
-  // $("#symptom-add-btn").on("click", () => fetchSymptoms().then((symptom) => {
-  //   console.log(symptom);
-  //   symptomsCollection.push(symptom)
-  //   }
-  // ));
-  //
-  // $("#submit-btn").on("click", () => fetchDiagnosis(symptomsCollection).then((diag) => updateResponseText()));
-  // //
-  // const fetchDiagnosis = function(symptoms){
-  //   let sex = $("#sex-input").val();
-  //   let age = $("#age-input").val();
-  //   let query = {symptoms: symptoms, sex: sex, age: age};
-  //   return $.ajax({
-  //     method: "POST",
-  //     url: 'api/diagnosis',
-  //     data: {query},
-  //     success: function(diag) { currentDiag = diag}
-  //   })
-  // }
-  //
-  // const updateDiagnosis = function(answer){
-  //
-  //   return $.ajax({
-  //     method: "POST",
-  //     url: '/api/responses',
-  //     data: {diag: currentDiag, answer: answer},
-  //     success: function(diag){
-  //       currentDiag = diag
-  //     }
-  //   })
-  // }
-  // //
-  // const renderOptions = function(symptom) {
-  //   let name = symptom.name;
-  //   let symptom_id = symptom.id;
-  //   let answerContainer = document.getElementById("answer-container");
-  //   let symptomContainer = document.createElement("div");
-  //   symptomContainer.setAttribute("class", "symptom");
-  //
-  //   answerContainer.appendChild(symptomContainer);
-  //   let btnContainer = document.createElement("div");
-  //   btnContainer.setAttribute("class", "btn-container");
-  //   symptom.choices.forEach(function(choice){
-  //     let choiceBtn = document.createElement('button');
-  //     choiceBtn.setAttribute("class", "btn");
-  //     btnContainer.appendChild(choiceBtn);
-  //     choiceBtn.addEventListener("click", function(){
-  //       updateDiagnosis(choice.id)
-  //       .then( function() {
-  //         updateResponseText()
-  //       }
-  //     )
-  //   });
-  //     choiceBtn.innerHTML = choice.label;
-  //
-  //     answerContainer.appendChild(btnContainer);
-  //   });
-  // }
-  //
-  // const fetchImages = (disease) => {
-  //   return $.ajax({
-  //     method: 'POST',
-  //     url: 'api/images',
-  //     data: {disease: disease}
-  //   })
-  // }
-  //
-  // const renderImages = (images) => {
-  //
-  //   images = images.images;
-  //   let imagesContainer = document.getElementsByClassName("images-container")[0];
-  //
-  //   images.forEach((image) => {
-  //     let imageDiv = document.createElement('img');
-  //     imageDiv.src = image.display_sizes[0].uri
-  //     imagesContainer.appendChild(imageDiv);
-  //   });
-  //
-  // }
-  //
-  // const updateResponseText = function(){
-  //   fetchImages(currentDiag.most_likely_illness).then((images) => renderImages(images));
-  //   $('#answer-container').empty();
-  //   let responseContainer = document.getElementById("response-container");
-  //   let answerContainer = document.getElementById("answer-container");
-  //   let illnessContainer = document.getElementById("illness-container");
-  //
-  //   let options = currentDiag.response.question.items;
-  //
-  //   options.forEach(function(symptom){
-  //     renderOptions(symptom);
-  //   });
-  //
-  //   console.log(options);
-  //
-  //   responseContainer.innerHTML = currentDiag.response.question.text;
-  //   playVoice(currentDiag.response.question.text);
-  //   illnessContainer.innerHTML = currentDiag.most_likely_illness || ""
-  //
-  // }
+  const renderOptions = function(symptom) {
+    let name = symptom.name;
+    let symptom_id = symptom.id;
+    let answerContainer = document.getElementById("answer-container");
+    let symptomContainer = document.createElement("div");
+    symptomContainer.setAttribute("class", "symptom");
+
+    answerContainer.appendChild(symptomContainer);
+    let btnContainer = document.createElement("div");
+    btnContainer.setAttribute("class", "btn-container");
+    symptom.choices.forEach(function(choice){
+      let choiceBtn = document.createElement('button');
+      choiceBtn.setAttribute("class", "btn");
+      btnContainer.appendChild(choiceBtn);
+      choiceBtn.addEventListener("click", function(){
+        updateDiagnosis(choice.id)
+        .then( function() {
+          updateResponseText()
+        }
+      )
+    });
+      choiceBtn.innerHTML = choice.label;
+
+      answerContainer.appendChild(btnContainer);
+    });
+  }
+
+  const fetchImages = (disease) => {
+    return $.ajax({
+      method: 'POST',
+      url: 'api/images',
+      data: {disease: disease}
+    })
+  }
+
+  const renderImages = (images) => {
+
+    images = images.images;
+    let imagesContainer = document.getElementsByClassName("images-container")[0];
+
+    images.forEach((image) => {
+      let imageDiv = document.createElement('img');
+      imageDiv.src = image.display_sizes[0].uri
+      imagesContainer.appendChild(imageDiv);
+    });
+
+  }
+
+  const updateResponseText = function(){
+    fetchImages(currentDiag.most_likely_illness).then((images) => renderImages(images));
+    $('#answer-container').empty();
+    let responseContainer = document.getElementById("response-container");
+    let answerContainer = document.getElementById("answer-container");
+    let illnessContainer = document.getElementById("illness-container");
+
+    let options = currentDiag.response.question.items;
+
+    options.forEach(function(symptom){
+      renderOptions(symptom);
+    });
+
+    console.log(options);
+
+    responseContainer.innerHTML = currentDiag.response.question.text;
+    playVoice(currentDiag.response.question.text);
+    illnessContainer.innerHTML = currentDiag.most_likely_illness || ""
+
+  }
 
 
 });
