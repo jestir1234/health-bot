@@ -5,7 +5,7 @@
 
 HealthBot is a simple chat bot made to easier identify potential diagnosis' based on given symptoms. The app uses a JavaScript/jQuery front-end and Ruby on Rails backend.
 
-![healthbot](./screenshots/healthbot)
+![healthbot](./screenshots/healthbot.png)
 
 
 ### Speech Recognition
