@@ -9,7 +9,7 @@ HealthBot is a simple chat bot made to easier identify potential diagnosis' base
 
 
 ### Speech Recognition
-The app uses JavaScript's speech recognition library to allow user's to tell the app their symptoms. Simple state your symptom and watch as it appears in the input box. Afterwards, say 'add' and the app will populate the symptoms list with the symptom. When the user is satisfied with their list of symptoms, they simply say 'submit' and the the app will send the symptoms to the backend via an ajax post request.
+The app uses JavaScript's speech recognition library to allow user's to tell the app their symptoms. State your symptom and watch as it appears in the input box. Afterwards, say 'add' and the app will populate the symptoms list with the symptom. When the user is satisfied with their list of symptoms, they simply say 'submit' and the the app will send the symptoms to the backend via an ajax post request.
 
 ### Intelligent Medical API
 The app leverages Infermedica's extensive API to match symptoms with potential diagnosises. Upon forwarding a list of symptoms, the backend makes a RESTful call to Infermedica's API and receives an initial diagnosis along with a JSON containing further questions and possible options for the user to narrow down their list of diagnosises. The backend also computes the highest probable condition the user has based on scores received from the JSON object.
