@@ -1,5 +1,7 @@
 # HealthBot
 
+[live](https://health-bot.herokuapp.com/)
+
 HealthBot is a simple web application made to easier identify potential diagnosises based on given symptoms. The app uses a JavaScript/jQuery front-end and Ruby on Rails backend.
 
 ### Speech Recognition
