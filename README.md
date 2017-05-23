@@ -1,7 +1,7 @@
 # HealthBot
 
 [Live](https://health-bot.herokuapp.com/)
-(Warning: I only have 1000 API calls to Infermedica a month! Please try only a few symptoms to test functionality!)
+### Warning: I only have 1000 API calls to Infermedica a month! Please try only a few symptoms to test functionality!
 
 HealthBot is a simple chat bot made to easier identify potential diagnosis' based on given symptoms. The app uses a JavaScript/jQuery front-end and Ruby on Rails backend.
 
