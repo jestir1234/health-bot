@@ -61,11 +61,11 @@ recognition.onresult = function(event) {
 
     console.log("Final: ",final_transcript);
     console.log(`final transcript is ${final_transcript}`);
-    if (final_transcript === " add"){
+    if (final_transcript === " add" || interim_transcript === " add"){
       console.log("adding to symptoms");
       let thisBtn = document.getElementById("symptom-add-btn");
       thisBtn.click();
-    } else if (final_transcript === " submit"){
+    } else if (final_transcript === " submit" || interim_transcript === " submit"){
       console.log("submitting form...")
       let thisBtn = document.getElementById("submit-btn");
       thisBtn.click();

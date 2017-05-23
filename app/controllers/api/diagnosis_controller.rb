@@ -4,7 +4,7 @@ require 'infermedica'
 class Api::DiagnosisController < ApplicationController
 
   def create
-
+    debugger
     api = Infermedica::Api.new(api_id: ENV['infermedica_api_id'], api_key: ENV['infermedica_api_key'])
     symptoms_id_collection = []
     symptom_ids = params[:query][:symptoms].keys
